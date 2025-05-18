@@ -85,48 +85,89 @@ void drawCircle(float cx, float cy, float r, int segments = 360) {
     }
     glEnd();
 }
-
 void drawF16(float x, float y, float scale = 1.0f) {
     glPushMatrix();
     glTranslatef(x, y, 0.0f);
     glScalef(scale, scale, 1.0f);
 
-    // Body
-    glColor3f(0.3f, 0.3f, 0.3f);
+    // Fuselage (Main body - streamlined look)
+    glColor3f(0.4f, 0.4f, 0.4f); // Gunmetal gray
     glBegin(GL_POLYGON);
-    glVertex2f(0, 0);
-    glVertex2f(60, 8);
-    glVertex2f(60, -8);
+    glVertex2f(-30, 0);   // Tail base
+    glVertex2f(60, 6);    // Nose top
+    glVertex2f(60, -6);   // Nose bottom
+    glVertex2f(-30, 0);   // Back to tail
     glEnd();
 
-    // Cockpit
-    glColor3f(0.0f, 0.0f, 0.8f);
-    drawCircle(50, 0, 6, 20);
-
-    // Wings
-    glColor3f(0.7f, 0.7f, 0.7f);
-    glBegin(GL_QUADS);
-    glVertex2f(15, 5);
-    glVertex2f(40, 5);
-    glVertex2f(30, 25);
-    glVertex2f(10, 25);
-    glVertex2f(15, -5);
-    glVertex2f(40, -5);
-    glVertex2f(30, -25);
-    glVertex2f(10, -25);
-    glVertex2f(45, 3);
-    glVertex2f(55, 3);
-    glVertex2f(55, -3);
-    glVertex2f(45, -3);
+    // Vertical stabilizer (tail fin)
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(-15, 0);
+    glVertex2f(-5, 0);
+    glVertex2f(-10, 15);
     glEnd();
 
-    // Afterburner
-    if (currentState == TAKEOFF_CINEMATIC || rand() % 10 > 3) {
-        glColor3f(1.0f, 1.0f, 0.0f);
+    // Cockpit canopy (smooth dome)
+    glColor3f(0.0f, 0.2f, 0.6f);
+    drawCircle(40, 0, 6, 30); // More vertices for smoother circle
+
+    // Main wings
+    glColor3f(0.6f, 0.6f, 0.6f); // Slight contrast
+    glBegin(GL_POLYGON); // Left wing
+    glVertex2f(10, 0);
+    glVertex2f(35, 0);
+    glVertex2f(20, 20);
+    glVertex2f(-5, 18);
+    glEnd();
+
+    glBegin(GL_POLYGON); // Right wing
+    glVertex2f(10, 0);
+    glVertex2f(35, 0);
+    glVertex2f(20, -20);
+    glVertex2f(-5, -18);
+    glEnd();
+
+    // Tail wings (horizontal stabilizers)
+    glBegin(GL_POLYGON); // Left tail wing
+    glVertex2f(-20, 0);
+    glVertex2f(-10, 0);
+    glVertex2f(-5, 10);
+    glVertex2f(-15, 10);
+    glEnd();
+
+    glBegin(GL_POLYGON); // Right tail wing
+    glVertex2f(-20, 0);
+    glVertex2f(-10, 0);
+    glVertex2f(-5, -10);
+    glVertex2f(-15, -10);
+    glEnd();
+
+    // Nose cone
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(60, 0);
+    glVertex2f(70, 3);
+    glVertex2f(70, -3);
+    glEnd();
+
+    // Engine exhaust
+    glColor3f(0.2f, 0.2f, 0.2f);
+    drawCircle(-30, 0, 3, 20);
+
+    // Afterburner effect (sparks only when active or random flare)
+    if (currentState == TAKEOFF_CINEMATIC || rand() % 10 > 5) {
+        glColor3f(1.0f, 0.6f, 0.0f); // Orange flame
         glBegin(GL_TRIANGLES);
-        glVertex2f(0, 3);
-        glVertex2f(-15, 0);
-        glVertex2f(0, -3);
+        glVertex2f(-30, 2);
+        glVertex2f(-45, 0);
+        glVertex2f(-30, -2);
+        glEnd();
+
+        glColor3f(1.0f, 1.0f, 0.0f); // Yellow inner flame
+        glBegin(GL_TRIANGLES);
+        glVertex2f(-30, 1);
+        glVertex2f(-40, 0);
+        glVertex2f(-30, -1);
         glEnd();
     }
 
@@ -243,6 +284,94 @@ void drawExplosion(float x, float y, float size) {
     glColor3f(1.0f, 0.0f, 0.0f);
     drawCircle(x, y, size * 0.4f);
 }
+void drawMissile(float x, float y, float height = 50.0f) {
+    // Missile body
+    glColor3f(0.6f, 0.6f, 0.6f);  // light grey
+    glBegin(GL_QUADS);
+    glVertex2f(x - 4, y);
+    glVertex2f(x + 4, y);
+    glVertex2f(x + 4, y + height);
+    glVertex2f(x - 4, y + height);
+    glEnd();
+
+    // Warhead (tip)
+    glColor3f(1.0f, 0.0f, 0.0f);  // red
+    glBegin(GL_TRIANGLES);
+    glVertex2f(x - 6, y + height);
+    glVertex2f(x + 6, y + height);
+    glVertex2f(x, y + height + 10);
+    glEnd();
+}
+
+void drawMissile1(float x, float y, float height = 70.0f) {
+    // Missile body
+    glColor3f(0.7f, 0.7f, 0.7f);
+    glBegin(GL_QUADS);
+    glVertex2f(x - 5, y);
+    glVertex2f(x + 5, y);
+    glVertex2f(x + 5, y + height);
+    glVertex2f(x - 5, y + height);
+    glEnd();
+
+    // Warhead
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(x - 7, y + height);
+    glVertex2f(x + 7, y + height);
+    glVertex2f(x, y + height + 12);
+    glEnd();
+}
+
+void drawWheel(float x, float y, float radius = 10.0f) {
+    glColor3f(0.1f, 0.1f, 0.1f);
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(x, y);
+    for (int angle = 0; angle <= 360; angle += 10) {
+        float rad = angle * M_PI / 180.0f;
+        glVertex2f(x + cos(rad) * radius, y + sin(rad) * radius);
+    }
+    glEnd();
+}
+
+void drawAirDefenseSystemTruck(float baseX, float baseY) {
+    // Truck body
+    glColor3f(0.25f, 0.25f, 0.25f); // Dark military gray
+    glBegin(GL_QUADS);
+    glVertex2f(baseX - 60, baseY);
+    glVertex2f(baseX + 60, baseY);
+    glVertex2f(baseX + 60, baseY + 30);
+    glVertex2f(baseX - 60, baseY + 30);
+    glEnd();
+
+    // Cabin
+    glColor3f(0.3f, 0.3f, 0.3f);
+    glBegin(GL_QUADS);
+    glVertex2f(baseX - 60, baseY + 30);
+    glVertex2f(baseX - 30, baseY + 30);
+    glVertex2f(baseX - 30, baseY + 55);
+    glVertex2f(baseX - 60, baseY + 55);
+    glEnd();
+
+    // Wheels
+    drawWheel(baseX - 45, baseY);
+    drawWheel(baseX,      baseY);
+    drawWheel(baseX + 45, baseY);
+
+    // Launcher base (on truck)
+    glColor3f(0.18f, 0.18f, 0.18f);
+    glBegin(GL_QUADS);
+    glVertex2f(baseX - 30, baseY + 30);
+    glVertex2f(baseX + 30, baseY + 30);
+    glVertex2f(baseX + 30, baseY + 38);
+    glVertex2f(baseX - 30, baseY + 38);
+    glEnd();
+
+    // Missiles
+    drawMissile1(baseX - 20, baseY + 38);
+    drawMissile1(baseX,      baseY + 38);
+    drawMissile1(baseX + 20, baseY + 38);
+}
+
 
 void drawRunway() {
     // Runway - now grounded at bottom of screen
@@ -264,6 +393,8 @@ void drawRunway() {
         glVertex2f(i, 25);
         glEnd();
     }
+drawAirDefenseSystemTruck(300, 50); // X position, Y = top of runway
+drawAirDefenseSystemTruck(600, 50); // Another one
 
 
 
@@ -306,6 +437,43 @@ for (int i = 0; i <= numSegments; i++) {
 }
 glEnd();
 
+// July Monument - Symbol of Freedom
+float monumentBaseX = WIDTH + 100;  // before the flagpole
+float monumentBaseY = 60;
+float monumentHeight = 100;
+
+// Monument pedestal
+glColor3f(0.25f, 0.25f, 0.25f);  // dark stone
+glBegin(GL_QUADS);
+glVertex2f(monumentBaseX - 10, monumentBaseY);
+glVertex2f(monumentBaseX + 10, monumentBaseY);
+glVertex2f(monumentBaseX + 10, monumentBaseY + 20);
+glVertex2f(monumentBaseX - 10, monumentBaseY + 20);
+glEnd();
+
+// Flame base (rising upward shape - triangle)
+glColor3f(0.8f, 0.0f, 0.0f);  // deep red
+glBegin(GL_TRIANGLES);
+glVertex2f(monumentBaseX - 8, monumentBaseY + 20);
+glVertex2f(monumentBaseX + 8, monumentBaseY + 20);
+glVertex2f(monumentBaseX, monumentBaseY + 40);
+glEnd();
+
+// Inner flame (orange)
+glColor3f(1.0f, 0.5f, 0.0f);
+glBegin(GL_TRIANGLES);
+glVertex2f(monumentBaseX - 5, monumentBaseY + 30);
+glVertex2f(monumentBaseX + 5, monumentBaseY + 30);
+glVertex2f(monumentBaseX, monumentBaseY + 50);
+glEnd();
+
+// Flame tip (yellow)
+glColor3f(1.0f, 1.0f, 0.0f);
+glBegin(GL_TRIANGLES);
+glVertex2f(monumentBaseX - 2, monumentBaseY + 45);
+glVertex2f(monumentBaseX + 2, monumentBaseY + 45);
+glVertex2f(monumentBaseX, monumentBaseY + monumentHeight);
+glEnd();
 
 
 // Airport terminal building (wider and taller)
