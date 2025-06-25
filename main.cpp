@@ -862,21 +862,18 @@ void updateDayNightCycle() {
     if (dayPhase == 0) { // Dawn
         sun.x = WIDTH/2 + WIDTH * 0.4f * sin(cycleProgress * 3.14159f);
         sun.y = HEIGHT - HEIGHT * 0.8f * cycleProgress;
-        moon.x = WIDTH/2 - WIDTH * 0.4f * sin(cycleProgress * 3.14159f);
-        moon.y = HEIGHT + 100;
+        
     } else if (dayPhase == 1) { // Day
         sun.x = WIDTH/2 + WIDTH * 0.4f * cos(cycleProgress * 3.14159f);
         sun.y = HEIGHT * 0.2f + HEIGHT * 0.6f * (1 - cycleProgress);
-        moon.x = WIDTH/2 - WIDTH * 0.4f * cos(cycleProgress * 3.14159f);
-        moon.y = HEIGHT + 100;
+       
     } else if (dayPhase == 2) { // Afternoon
         sun.x = WIDTH/2 - WIDTH * 0.4f * sin(cycleProgress * 3.14159f);
         sun.y = HEIGHT * 0.2f + HEIGHT * 0.6f * cycleProgress;
         moon.x = WIDTH/2 + WIDTH * 0.4f * sin(cycleProgress * 3.14159f);
         moon.y = HEIGHT - HEIGHT * 0.8f * (1 - cycleProgress);
     } else { // Night
-        sun.x = WIDTH/2 - WIDTH * 0.4f * cos(cycleProgress * 3.14159f);
-        sun.y = HEIGHT + 100;
+        
         moon.x = WIDTH/2 + WIDTH * 0.4f * cos(cycleProgress * 3.14159f);
         moon.y = HEIGHT * 0.2f + HEIGHT * 0.6f * (1 - cycleProgress);
     }
