@@ -44,7 +44,7 @@ _A 2D air combat game built with OpenGL and GLUT where you defend Bangladesh's a
 - **Language:** C++
 - **Graphics:** OpenGL (2D)
 - **Window/Input Handling:** GLUT
-- **Sound:** Windows API (`winmm.lib`)
+
 
 ---
 
